@@ -1,3 +1,25 @@
 node_modules
 
 /../generated/prisma
+
+# Environment variables - NEVER commit these!
+.env
+.env.local
+.env.production
+.env.*.local
+
+# Database
+*.db
+*.sqlite
+
+# Build outputs
+dist/
+build/
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
