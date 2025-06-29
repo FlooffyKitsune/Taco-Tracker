@@ -187,16 +187,6 @@ Developer accounts get access to debug information in development mode. Add user
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
-
-- **Taco Tuesday Community** - For the inspiration
-- **Supabase** - For the incredible backend platform
-- **Discord** - For seamless authentication
-- **SvelteKit Team** - For the amazing framework
-- **All Taco Enthusiasts** - For making this project worthwhile
-
 ---
 
 **Built with ❤️ and lots of 🌮 by VulpineStudio**
-
-*Perfect for groups who want to optimize their Taco Tuesday orders, track consumption, and gamify their taco experience!*
