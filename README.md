@@ -70,9 +70,11 @@ cd taco-tracker
 # Install dependencies
 npm install
 
-# Set up environment variables
+# 🔒 IMPORTANT: Set up environment variables securely
 cp .env.example .env
-# Add your Supabase and Discord credentials
+# Edit .env and add your actual credentials (NEVER commit this file!)
+# Get Supabase credentials from: https://supabase.com/dashboard
+# Get Discord credentials from: https://discord.com/developers/applications
 
 # Run database migrations
 npx prisma migrate dev
