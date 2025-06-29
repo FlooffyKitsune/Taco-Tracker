@@ -16,7 +16,7 @@ export const TACO_TYPES: TacoType[] = [
 ];
 
 export const DEFAULT_TACO_DISTRIBUTION = [
-	{ typeId: 'chicken', ratio: 2 },
+	{ typeId: 'al-pastor', ratio: 2 },
 	{ typeId: 'carne-asada', ratio: 2 },
 	{ typeId: 'chorizo', ratio: 1 }
 ];
@@ -25,16 +25,18 @@ export const BUY_2_GET_1_MULTIPLIER = 2 / 3; // For buy 2 get 1 free deal
 
 export function calculateTacoOrder(
 	peopleCount: number,
-	customDistribution?: { typeId: string; ratio: number }[]
+	customDistribution?: { typeId: string; ratio: number }[],
+	tacoTypes?: TacoType[]
 ): OrderResult {
 	const distribution = customDistribution || DEFAULT_TACO_DISTRIBUTION;
+	const availableTacoTypes = tacoTypes || TACO_TYPES;
 	const totalRatio = distribution.reduce((sum, item) => sum + item.ratio, 0);
 	const tacosPerPerson = Math.ceil(totalRatio);
 	const totalTacos = tacosPerPerson * peopleCount;
 
 	// Calculate each taco type quantity
 	const orders: TacoOrder[] = distribution.map((item) => {
-		const tacoType = TACO_TYPES.find((t) => t.id === item.typeId)!;
+		const tacoType = availableTacoTypes.find((t) => t.id === item.typeId)!;
 		const quantity = (item.ratio / totalRatio) * totalTacos;
 		return {
 			type: tacoType,

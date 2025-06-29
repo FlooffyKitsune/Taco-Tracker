@@ -1,9 +1,26 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { TacoStorage } from '$lib/storage';
-	import { TACO_TYPES } from '$lib/tacoCalculator';
-	import { getUnlockedAchievements, getNextAchievement, getRarityColor } from '$lib/achievements';
-	import type { TacoConsumption, TacoSession, MultiTacoConsumption } from '$lib/types';
+	import { getUserAchievements, getCategoryColor, getPointsColor } from '$lib/achievements';
+	import { currentUser } from '$lib/stores';
+	import type { TacoConsumption, TacoSession, MultiTacoConsumption, TacoType } from '$lib/types';
+
+	// Database achievement type (what we actually get from Prisma)
+	type DbUserAchievement = {
+		id: string;
+		userId: string;
+		achievementId: string;
+		unlockedAt: Date;
+		achievement: {
+			id: string;
+			name: string;
+			description: string;
+			icon: string;
+			category: string;
+			requirement: number;
+			createdAt: Date;
+		};
+	};
 
 	let stats = {
 		totalTacosConsumed: 0,
@@ -14,10 +31,20 @@
 	};
 
 	let leaderboard: Array<{name: string, totalTacos: number, sessions: number}> = [];
-	let unlockedAchievements: ReturnType<typeof getUnlockedAchievements> = [];
-	let nextAchievement: ReturnType<typeof getNextAchievement> = null;
+	let unlockedAchievements: DbUserAchievement[] = [];
+	let tacoTypes: TacoType[] = [];
+	let loading = true;
 
-	function refreshStats() {
+	async function loadTacoTypes() {
+		try {
+			const response = await fetch('/api/taco-types');
+			if (response.ok) {
+				tacoTypes = await response.json();
+			}
+		} catch (error) {
+			console.error('Failed to load taco types:', error);
+		}
+	}	async function refreshStats() {
 		const totalTacosConsumed = TacoStorage.getTotalTacosConsumed();
 		const favoriteTacoType = TacoStorage.getFavoriteTacoType();
 		const allConsumptions = TacoStorage.getConsumptions();
@@ -33,15 +60,27 @@
 		};
 
 		leaderboard = TacoStorage.getLeaderboard();
-		unlockedAchievements = getUnlockedAchievements(allConsumptions);
-		nextAchievement = getNextAchievement(allConsumptions);
+		
+		// Load user achievements if authenticated
+		if ($currentUser) {
+			try {
+				unlockedAchievements = await getUserAchievements($currentUser.id);
+			} catch (error) {
+				console.error('Failed to load achievements:', error);
+				unlockedAchievements = [];
+			}
+		} else {
+			unlockedAchievements = [];
+		}
 	}
-
-	onMount(() => {
-		refreshStats();
+	onMount(async () => {
+		loading = true;
+		await loadTacoTypes();
+		await refreshStats();
+		loading = false;
 	});
 
-	$: favoriteTaco = TACO_TYPES.find((t) => t.id === stats.favoriteTacoType);
+	$: favoriteTaco = tacoTypes.find((t) => t.id === stats.favoriteTacoType);
 
 	function deleteConsumption(id: string) {
 		TacoStorage.deleteConsumption(id);
@@ -88,20 +127,18 @@
 			</div>
 		</div>
 	</div>
-
 	<!-- Achievements Section -->
 	<div class="achievement-panel card-3d rounded-xl p-6">
-		<h3 class="text-xl font-bold achievement-title mb-4">🏆 Achievements Unlocked</h3>
-		{#if unlockedAchievements.length > 0}
+		<h3 class="text-xl font-bold achievement-title mb-4">🏆 Achievements Unlocked</h3>		{#if unlockedAchievements.length > 0}
 			<div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
-				{#each unlockedAchievements as achievement, index}
-					<div class="achievement-item p-4 rounded-lg border-2 {getRarityColor(achievement.rarity)} stagger-item" style="animation-delay: {index * 0.1}s">
+				{#each unlockedAchievements as userAchievement, index}
+					<div class="achievement-item p-4 rounded-lg border-2 {getCategoryColor(userAchievement.achievement.category)} stagger-item" style="animation-delay: {index * 0.1}s">
 						<div class="flex items-center space-x-3">
-							<span class="text-2xl">{achievement.emoji}</span>
+							<span class="text-2xl">{userAchievement.achievement.icon}</span>
 							<div>
-								<h4 class="font-bold text-white">{achievement.title}</h4>
-								<p class="text-sm text-white/90">{achievement.description}</p>
-								<span class="text-xs uppercase font-bold bg-white/20 px-2 py-1 rounded mt-1 inline-block">{achievement.rarity}</span>
+								<h4 class="font-bold text-white">{userAchievement.achievement.name}</h4>
+								<p class="text-sm text-white/90">{userAchievement.achievement.description}</p>
+								<span class="text-xs uppercase font-bold {getPointsColor(userAchievement.achievement.requirement)} px-2 py-1 rounded mt-1 inline-block">{userAchievement.achievement.requirement} pts</span>
 							</div>
 						</div>
 					</div>
@@ -109,19 +146,6 @@
 			</div>
 		{:else}
 			<p class="text-white/70 text-center py-4">Start tracking tacos to unlock achievements! 🌮</p>
-		{/if}
-
-		{#if nextAchievement}
-			<div class="border-t border-white/20 pt-4 mt-4">
-				<h4 class="font-bold text-white mb-3">🎯 Next Achievement:</h4>
-				<div class="achievement-next flex items-center space-x-3 p-4 rounded-lg">
-					<span class="text-2xl opacity-60">{nextAchievement.emoji}</span>
-					<div>
-						<h4 class="font-bold text-white/80">{nextAchievement.title}</h4>
-						<p class="text-sm text-white/70">{nextAchievement.description}</p>
-					</div>
-				</div>
-			</div>
 		{/if}
 	</div>
 

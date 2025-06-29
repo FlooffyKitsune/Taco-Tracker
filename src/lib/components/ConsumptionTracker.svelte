@@ -1,11 +1,26 @@
 <script lang="ts">
-	import { TACO_TYPES } from '$lib/tacoCalculator';
 	import { TacoStorage } from '$lib/storage';
+	import { onMount } from 'svelte';
 	import type { TacoType, TacoConsumption, TacoConsumptionEntry, MultiTacoConsumption } from '$lib/types';
 
 	let personName = '';
 	let tacoEntries: TacoConsumptionEntry[] = [];
 	let isSubmitting = false;
+	let tacoTypes: TacoType[] = [];
+	let loading = true;
+	onMount(async () => {
+		loading = true;
+		try {
+			const response = await fetch('/api/taco-types');
+			if (response.ok) {
+				tacoTypes = await response.json();
+			}
+		} catch (error) {
+			console.error('Failed to load taco types:', error);
+		} finally {
+			loading = false;
+		}
+	});
 
 	// Add a new taco entry
 	function addTacoEntry(tacoType: TacoType) {
@@ -95,21 +110,31 @@
 		<div>
 			<div class="text-sm font-medium text-white/90 mb-3">
 				Select Tacos You've Eaten
-			</div>
-			<div class="grid grid-cols-2 gap-3 mb-4">
-				{#each TACO_TYPES as taco, index}
-					<button
-						type="button"
-						on:click={() => addTacoEntry(taco)}
-						class="p-3 rounded-lg border-2 transition-all duration-300 hover:scale-105 border-white/20 hover:border-blue-400 hover:bg-white/10"
-						style="animation-delay: {index * 0.05}s"
-					>
-						<div class="flex items-center space-x-2">
-							<span class="text-2xl">{taco.emoji}</span>
-							<span class="font-medium text-white">{taco.name}</span>
-						</div>
-					</button>
-				{/each}
+			</div>			<div class="grid grid-cols-2 gap-3 mb-4">
+				{#if loading}
+					<div class="col-span-2 text-center py-4">
+						<div class="inline-block animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
+						<p class="mt-2 text-white/70">Loading taco types...</p>
+					</div>
+				{:else if tacoTypes.length === 0}
+					<div class="col-span-2 text-center py-4">
+						<p class="text-red-400">Failed to load taco types. Please refresh the page.</p>
+					</div>
+				{:else}
+					{#each tacoTypes as taco, index}
+						<button
+							type="button"
+							on:click={() => addTacoEntry(taco)}
+							class="p-3 rounded-lg border-2 transition-all duration-300 hover:scale-105 border-white/20 hover:border-blue-400 hover:bg-white/10"
+							style="animation-delay: {index * 0.05}s"
+						>
+							<div class="flex items-center space-x-2">
+								<span class="text-2xl">{taco.emoji}</span>
+								<span class="font-medium text-white">{taco.name}</span>
+							</div>
+						</button>
+					{/each}
+				{/if}
 			</div>
 		</div>
 

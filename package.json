@@ -34,6 +34,13 @@
   },
   "type": "module",
   "dependencies": {
-    "lucide-svelte": "^0.316.0"
+    "@auth/prisma-adapter": "^2.10.0",
+    "@auth/sveltekit": "^1.10.0",
+    "@prisma/client": "^6.10.1",
+    "@supabase/auth-helpers-sveltekit": "^0.13.0",
+    "@supabase/supabase-js": "^2.50.2",
+    "lucide-svelte": "^0.316.0",
+    "pg": "^8.16.3",
+    "prisma": "^6.10.1"
   }
 }

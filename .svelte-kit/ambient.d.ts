@@ -26,8 +26,17 @@
  * ```
  */
 declare module '$env/static/private' {
+	export const DATABASE_URL: string;
+	export const DIRECT_URL: string;
+	export const NEXTAUTH_URL: string;
+	export const NEXTAUTH_SECRET: string;
+	export const DISCORD_CLIENT_ID: string;
+	export const DISCORD_CLIENT_SECRET: string;
+	export const SUPABASE_SERVICE_ROLE_KEY: string;
 	export const ALLUSERSPROFILE: string;
 	export const APPDATA: string;
+	export const ChocolateyInstall: string;
+	export const ChocolateyLastPathUpdate: string;
 	export const CHROME_CRASHPAD_PIPE_NAME: string;
 	export const COLOR: string;
 	export const COLORTERM: string;
@@ -35,39 +44,32 @@ declare module '$env/static/private' {
 	export const CommonProgramW6432: string;
 	export const COMPUTERNAME: string;
 	export const ComSpec: string;
-	export const conda: string;
-	export const CONDA_DEFAULT_ENV: string;
 	export const CONDA_EXE: string;
-	export const CONDA_PREFIX: string;
-	export const CONDA_PROMPT_MODIFIER: string;
-	export const CONDA_PYTHON_EXE: string;
-	export const CONDA_SHLVL: string;
-	export const CUDA_PATH: string;
-	export const CUDA_PATH_V10_1: string;
 	export const DriverData: string;
 	export const EDITOR: string;
-	export const EFC_34656_1592913036: string;
+	export const EFC_12328: string;
+	export const FPS_BROWSER_APP_PROFILE_STRING: string;
+	export const FPS_BROWSER_USER_PROFILE_STRING: string;
 	export const GIT_ASKPASS: string;
-	export const GIT_PAGER: string;
 	export const HOME: string;
 	export const HOMEDRIVE: string;
 	export const HOMEPATH: string;
+	export const IGCCSVC_DB: string;
 	export const INIT_CWD: string;
 	export const LANG: string;
 	export const LOCALAPPDATA: string;
 	export const LOCAL_GIT_DIRECTORY: string;
 	export const LOGONSERVER: string;
-	export const MOZ_CRASHREPORTER_DATA_DIRECTORY: string;
-	export const MOZ_CRASHREPORTER_EVENTS_DIRECTORY: string;
-	export const MOZ_CRASHREPORTER_PING_DIRECTORY: string;
-	export const MOZ_CRASHREPORTER_STRINGS_OVERRIDE: string;
 	export const NODE: string;
 	export const NODE_ENV: string;
+	export const NODE_EXE: string;
+	export const NPM_CLI_JS: string;
 	export const npm_command: string;
 	export const npm_config_cache: string;
 	export const npm_config_globalconfig: string;
 	export const npm_config_global_prefix: string;
 	export const npm_config_init_module: string;
+	export const npm_config_legacy_peer_deps: string;
 	export const npm_config_local_prefix: string;
 	export const npm_config_node_gyp: string;
 	export const npm_config_noproxy: string;
@@ -82,15 +84,15 @@ declare module '$env/static/private' {
 	export const npm_package_json: string;
 	export const npm_package_name: string;
 	export const npm_package_version: string;
+	export const NPM_PREFIX_NPM_CLI_JS: string;
 	export const NUMBER_OF_PROCESSORS: string;
-	export const NVCUDASAMPLES10_1_ROOT: string;
-	export const NVCUDASAMPLES_ROOT: string;
-	export const NVTOOLSEXT_PATH: string;
+	export const NVAFX_SDK_DIR: string;
+	export const OneDrive: string;
+	export const OPENSSL_ia32cap: string;
 	export const ORIGINAL_XDG_CURRENT_DESKTOP: string;
 	export const OS: string;
 	export const Path: string;
 	export const PATHEXT: string;
-	export const POWERSHELL_DISTRIBUTION_CHANNEL: string;
 	export const PROCESSOR_ARCHITECTURE: string;
 	export const PROCESSOR_IDENTIFIER: string;
 	export const PROCESSOR_LEVEL: string;
@@ -102,7 +104,6 @@ declare module '$env/static/private' {
 	export const PSModulePath: string;
 	export const PUBLIC: string;
 	export const SESSIONNAME: string;
-	export const SSL_CERT_FILE: string;
 	export const SystemDrive: string;
 	export const SystemRoot: string;
 	export const TEMP: string;
@@ -117,12 +118,10 @@ declare module '$env/static/private' {
 	export const VSCODE_GIT_ASKPASS_MAIN: string;
 	export const VSCODE_GIT_ASKPASS_NODE: string;
 	export const VSCODE_GIT_IPC_HANDLE: string;
-	export const VSCODE_INJECTION: string;
 	export const windir: string;
+	export const ZES_ENABLE_SYSMAN: string;
 	export const _CONDA_EXE: string;
 	export const _CONDA_ROOT: string;
-	export const __COMPAT_LAYER: string;
-	export const __CONDA_OPENSLL_CERT_FILE_SET: string;
 }
 
 /**
@@ -135,7 +134,8 @@ declare module '$env/static/private' {
  * ```
  */
 declare module '$env/static/public' {
-	
+	export const PUBLIC_SUPABASE_URL: string;
+	export const PUBLIC_SUPABASE_ANON_KEY: string;
 }
 
 /**
@@ -154,8 +154,17 @@ declare module '$env/static/public' {
  */
 declare module '$env/dynamic/private' {
 	export const env: {
+		DATABASE_URL: string;
+		DIRECT_URL: string;
+		NEXTAUTH_URL: string;
+		NEXTAUTH_SECRET: string;
+		DISCORD_CLIENT_ID: string;
+		DISCORD_CLIENT_SECRET: string;
+		SUPABASE_SERVICE_ROLE_KEY: string;
 		ALLUSERSPROFILE: string;
 		APPDATA: string;
+		ChocolateyInstall: string;
+		ChocolateyLastPathUpdate: string;
 		CHROME_CRASHPAD_PIPE_NAME: string;
 		COLOR: string;
 		COLORTERM: string;
@@ -163,39 +172,32 @@ declare module '$env/dynamic/private' {
 		CommonProgramW6432: string;
 		COMPUTERNAME: string;
 		ComSpec: string;
-		conda: string;
-		CONDA_DEFAULT_ENV: string;
 		CONDA_EXE: string;
-		CONDA_PREFIX: string;
-		CONDA_PROMPT_MODIFIER: string;
-		CONDA_PYTHON_EXE: string;
-		CONDA_SHLVL: string;
-		CUDA_PATH: string;
-		CUDA_PATH_V10_1: string;
 		DriverData: string;
 		EDITOR: string;
-		EFC_34656_1592913036: string;
+		EFC_12328: string;
+		FPS_BROWSER_APP_PROFILE_STRING: string;
+		FPS_BROWSER_USER_PROFILE_STRING: string;
 		GIT_ASKPASS: string;
-		GIT_PAGER: string;
 		HOME: string;
 		HOMEDRIVE: string;
 		HOMEPATH: string;
+		IGCCSVC_DB: string;
 		INIT_CWD: string;
 		LANG: string;
 		LOCALAPPDATA: string;
 		LOCAL_GIT_DIRECTORY: string;
 		LOGONSERVER: string;
-		MOZ_CRASHREPORTER_DATA_DIRECTORY: string;
-		MOZ_CRASHREPORTER_EVENTS_DIRECTORY: string;
-		MOZ_CRASHREPORTER_PING_DIRECTORY: string;
-		MOZ_CRASHREPORTER_STRINGS_OVERRIDE: string;
 		NODE: string;
 		NODE_ENV: string;
+		NODE_EXE: string;
+		NPM_CLI_JS: string;
 		npm_command: string;
 		npm_config_cache: string;
 		npm_config_globalconfig: string;
 		npm_config_global_prefix: string;
 		npm_config_init_module: string;
+		npm_config_legacy_peer_deps: string;
 		npm_config_local_prefix: string;
 		npm_config_node_gyp: string;
 		npm_config_noproxy: string;
@@ -210,15 +212,15 @@ declare module '$env/dynamic/private' {
 		npm_package_json: string;
 		npm_package_name: string;
 		npm_package_version: string;
+		NPM_PREFIX_NPM_CLI_JS: string;
 		NUMBER_OF_PROCESSORS: string;
-		NVCUDASAMPLES10_1_ROOT: string;
-		NVCUDASAMPLES_ROOT: string;
-		NVTOOLSEXT_PATH: string;
+		NVAFX_SDK_DIR: string;
+		OneDrive: string;
+		OPENSSL_ia32cap: string;
 		ORIGINAL_XDG_CURRENT_DESKTOP: string;
 		OS: string;
 		Path: string;
 		PATHEXT: string;
-		POWERSHELL_DISTRIBUTION_CHANNEL: string;
 		PROCESSOR_ARCHITECTURE: string;
 		PROCESSOR_IDENTIFIER: string;
 		PROCESSOR_LEVEL: string;
@@ -230,7 +232,6 @@ declare module '$env/dynamic/private' {
 		PSModulePath: string;
 		PUBLIC: string;
 		SESSIONNAME: string;
-		SSL_CERT_FILE: string;
 		SystemDrive: string;
 		SystemRoot: string;
 		TEMP: string;
@@ -245,12 +246,10 @@ declare module '$env/dynamic/private' {
 		VSCODE_GIT_ASKPASS_MAIN: string;
 		VSCODE_GIT_ASKPASS_NODE: string;
 		VSCODE_GIT_IPC_HANDLE: string;
-		VSCODE_INJECTION: string;
 		windir: string;
+		ZES_ENABLE_SYSMAN: string;
 		_CONDA_EXE: string;
 		_CONDA_ROOT: string;
-		__COMPAT_LAYER: string;
-		__CONDA_OPENSLL_CERT_FILE_SET: string;
 		[key: `PUBLIC_${string}`]: undefined;
 		[key: `${string}`]: string | undefined;
 	}
@@ -270,6 +269,8 @@ declare module '$env/dynamic/private' {
  */
 declare module '$env/dynamic/public' {
 	export const env: {
+		PUBLIC_SUPABASE_URL: string;
+		PUBLIC_SUPABASE_ANON_KEY: string;
 		[key: `PUBLIC_${string}`]: string | undefined;
 	}
 }

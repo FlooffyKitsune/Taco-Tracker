@@ -1,3 +1,36 @@
 {
-	"/": []
+	"/": [
+		"src/routes/+layout.server.ts",
+		"src/routes/+layout.server.ts"
+	],
+	"/api/cleanup": [
+		"src/routes/api/cleanup/+server.ts"
+	],
+	"/api/consume": [
+		"src/routes/api/consume/+server.ts"
+	],
+	"/api/fix-email": [
+		"src/routes/api/fix-email/+server.ts"
+	],
+	"/api/seed": [
+		"src/routes/api/seed/+server.ts"
+	],
+	"/api/sessions": [
+		"src/routes/api/sessions/+server.ts"
+	],
+	"/api/taco-types": [
+		"src/routes/api/taco-types/+server.ts"
+	],
+	"/api/test": [
+		"src/routes/api/test/+server.ts"
+	],
+	"/api/users": [
+		"src/routes/api/users/+server.ts"
+	],
+	"/api/users/delete": [
+		"src/routes/api/users/delete/+server.ts"
+	],
+	"/setup": [
+		"src/routes/+layout.server.ts"
+	]
 }
