@@ -31,6 +31,29 @@ Use these predefined categories for consistent grouping:
 - **`streak`** - Daily/weekly patterns, consistency (📅)
 - **`special`** - Hidden/Easter egg achievements (⭐)
 
+## Current Achievement System Status
+
+**✅ Implemented Features:**
+- Steam-like achievement display on `/achievements` page
+- Shows both locked and unlocked achievements
+- Achievement unlocking logic for consumption, social, and streak achievements
+- Secret achievements with confetti animation
+- Database persistence with Supabase PostgreSQL
+- Achievement checking API endpoints
+
+**🔧 Achievement Categories & Colors:**
+- **Consumption** (Orange): Taco eating milestones
+- **Social** (Blue): Multi-user session participation  
+- **Streak** (Green): Daily/weekly consistency patterns
+- **Special** (Purple): Hidden/Easter egg achievements
+
+**📍 Current Achievements (20 total):**
+- First Bite, Taco Explorer, Flavor Hunter (consumption)
+- Social Butterfly, Team Spirit, Party Animal (social)  
+- Taco Tuesday Warrior, Tuesday Champion (streak)
+- Secret Sauce (special/hidden)
+- And 11 more...
+
 ## Adding Your Achievement
 
 ### 1. Edit the achievements file
@@ -49,13 +72,21 @@ Add your achievement to `src/lib/achievements.ts` in the `DEFAULT_ACHIEVEMENTS` 
 
 ### 2. Update the database
 
-Run the seed endpoint to add new achievements:
-
+**For Development:**
 ```bash
 # Via browser: visit http://localhost:5173/api/seed
 # Or via terminal:
 curl http://localhost:5173/api/seed
 ```
+
+**For Production:**
+```bash
+# Via browser: visit https://taco-tracker-eight.vercel.app/api/seed
+# Or via terminal:
+curl https://taco-tracker-eight.vercel.app/api/seed
+```
+
+> **Note**: The seed endpoint automatically handles adding new achievements without duplicating existing ones.
 
 ### 3. Achievement Logic (Optional)
 
@@ -63,6 +94,12 @@ If your achievement needs custom unlock logic beyond what's already implemented,
 
 - `src/lib/achievements.ts` - `checkAndUnlockAchievements()` function
 - `src/lib/userService.ts` - Achievement checking in consumption tracking
+
+**Current Auto-Unlock Logic:**
+- **Consumption achievements**: Based on `totalTacosEaten` and unique taco types
+- **Social achievements**: Based on `totalTacoSessions` 
+- **Streak achievements**: Day-specific logic (e.g., Tuesday tracking)
+- **Manual triggers**: Via `/api/achievements/check` endpoint
 
 ## Ideas for New Achievements
 
