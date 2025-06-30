@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 	import { fly, scale } from 'svelte/transition';
-	import { getCategoryColor } from '$lib/achievements.js';
+	import { getCategoryColor } from '$lib/achievementUtils.js';
 	import type { Achievement } from '$lib/types.js';
 
 	export let achievements: Achievement[] = [];
