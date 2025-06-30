@@ -14,10 +14,6 @@ export const { handle, signIn, signOut } = SvelteKitAuth({
       clientSecret: env.DISCORD_CLIENT_SECRET,
     })
   ],
-  pages: {
-    signIn: '/auth/signin',
-    error: '/auth/error',
-  },
   callbacks: {
     async session({ session, user }) {
       // Add user info from our database to the session
