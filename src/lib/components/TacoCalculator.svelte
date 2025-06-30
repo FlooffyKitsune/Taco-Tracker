@@ -1,7 +1,14 @@
 <script lang="ts">
 	import { calculateTacoOrder, DEFAULT_TACO_DISTRIBUTION } from '$lib/tacoCalculator';
 	import { TacoStorage } from '$lib/storage';
-	import { activeTab, showTacoRain, currentUser, availableUsers, selectedParticipants } from '$lib/stores';
+	import { 
+		activeTab, 
+		currentUser, 
+		availableUsers, 
+		selectedParticipants,
+		recentOrderForTracking,
+		statsRefreshTrigger
+	} from '$lib/stores';
 	import { onMount } from 'svelte';
 	import UserPicker from './UserPicker.svelte';
 	import type { TacoOrder, TacoSession, User, TacoType } from '$lib/types';
@@ -80,7 +87,7 @@
 
 	async function handleOrderNow() {
 		if (!$currentUser) {
-			alert('Please sign in to place an order!');
+			console.warn('Please sign in to place an order!');
 			return;
 		}
 
@@ -107,7 +114,7 @@
 
 			// Only proceed if we have a valid result
 			if (!result) {
-				alert('Unable to calculate order. Please try again.');
+				console.error('Unable to calculate order - no result available');
 				return;
 			}
 
@@ -117,27 +124,28 @@
 				date: new Date().toISOString().split('T')[0],
 				peopleCount: selectedUsers.length + 1,
 				orders: result.orders,
-				consumptions: []
+				consumptions: [],
+				participants: [
+					$currentUser,
+					...selectedUsers
+				].filter(Boolean) as User[]
 			};
 
 			TacoStorage.saveSession(session);
 
-			// TACO RAIN CELEBRATION! 🌮🎉
-			showTacoRain.set(true);
-			setTimeout(() => showTacoRain.set(false), 3000);
+			// Set this as the recent order for tracking
+			recentOrderForTracking.set(session);
 
-			// Show success message and switch to tracker
-			const participantText = selectedUsers.length > 0 
-				? ` with ${selectedUsers.map(u => u.name).join(', ')}` 
-				: '';
-			
-			alert(
-				`🌮 TACO ORDER PLACED! 🎉\n${result.totalTacos} delicious tacos incoming${participantText}!\n\nTime to track your consumption! 🌮🚀`
-			);
+			// Switch to tracker tab for easy consumption tracking
 			activeTab.set('tracker');
+			
+			// Trigger stats refresh
+			statsRefreshTrigger.update(n => n + 1);
+			
+			// Log success without alert popup
+			console.log(`🌮 TACO ORDER PLACED! 🎉\n${result.totalTacos} delicious tacos ordered${selectedUsers.length > 0 ? ` with ${selectedUsers.map(u => u.name).join(', ')}` : ''}!`);
 		} catch (error) {
 			console.error('Error placing order:', error);
-			alert('Failed to place order. Please try again.');
 		} finally {
 			creatingSession = false;
 		}

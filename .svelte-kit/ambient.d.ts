@@ -44,12 +44,15 @@ declare module '$env/static/private' {
 	export const CommonProgramW6432: string;
 	export const COMPUTERNAME: string;
 	export const ComSpec: string;
+	export const CONDA_DEFAULT_ENV: string;
 	export const CONDA_EXE: string;
+	export const CONDA_PREFIX: string;
+	export const CONDA_PROMPT_MODIFIER: string;
+	export const CONDA_PYTHON_EXE: string;
+	export const CONDA_SHLVL: string;
 	export const DriverData: string;
 	export const EDITOR: string;
-	export const EFC_12328: string;
-	export const FPS_BROWSER_APP_PROFILE_STRING: string;
-	export const FPS_BROWSER_USER_PROFILE_STRING: string;
+	export const EFC_24392: string;
 	export const GIT_ASKPASS: string;
 	export const HOME: string;
 	export const HOMEDRIVE: string;
@@ -58,7 +61,6 @@ declare module '$env/static/private' {
 	export const INIT_CWD: string;
 	export const LANG: string;
 	export const LOCALAPPDATA: string;
-	export const LOCAL_GIT_DIRECTORY: string;
 	export const LOGONSERVER: string;
 	export const NODE: string;
 	export const NODE_ENV: string;
@@ -104,6 +106,7 @@ declare module '$env/static/private' {
 	export const PSModulePath: string;
 	export const PUBLIC: string;
 	export const SESSIONNAME: string;
+	export const SSL_CERT_FILE: string;
 	export const SystemDrive: string;
 	export const SystemRoot: string;
 	export const TEMP: string;
@@ -118,10 +121,12 @@ declare module '$env/static/private' {
 	export const VSCODE_GIT_ASKPASS_MAIN: string;
 	export const VSCODE_GIT_ASKPASS_NODE: string;
 	export const VSCODE_GIT_IPC_HANDLE: string;
+	export const VSCODE_INJECTION: string;
 	export const windir: string;
 	export const ZES_ENABLE_SYSMAN: string;
 	export const _CONDA_EXE: string;
 	export const _CONDA_ROOT: string;
+	export const __CONDA_OPENSLL_CERT_FILE_SET: string;
 }
 
 /**
@@ -172,12 +177,15 @@ declare module '$env/dynamic/private' {
 		CommonProgramW6432: string;
 		COMPUTERNAME: string;
 		ComSpec: string;
+		CONDA_DEFAULT_ENV: string;
 		CONDA_EXE: string;
+		CONDA_PREFIX: string;
+		CONDA_PROMPT_MODIFIER: string;
+		CONDA_PYTHON_EXE: string;
+		CONDA_SHLVL: string;
 		DriverData: string;
 		EDITOR: string;
-		EFC_12328: string;
-		FPS_BROWSER_APP_PROFILE_STRING: string;
-		FPS_BROWSER_USER_PROFILE_STRING: string;
+		EFC_24392: string;
 		GIT_ASKPASS: string;
 		HOME: string;
 		HOMEDRIVE: string;
@@ -186,7 +194,6 @@ declare module '$env/dynamic/private' {
 		INIT_CWD: string;
 		LANG: string;
 		LOCALAPPDATA: string;
-		LOCAL_GIT_DIRECTORY: string;
 		LOGONSERVER: string;
 		NODE: string;
 		NODE_ENV: string;
@@ -232,6 +239,7 @@ declare module '$env/dynamic/private' {
 		PSModulePath: string;
 		PUBLIC: string;
 		SESSIONNAME: string;
+		SSL_CERT_FILE: string;
 		SystemDrive: string;
 		SystemRoot: string;
 		TEMP: string;
@@ -246,10 +254,12 @@ declare module '$env/dynamic/private' {
 		VSCODE_GIT_ASKPASS_MAIN: string;
 		VSCODE_GIT_ASKPASS_NODE: string;
 		VSCODE_GIT_IPC_HANDLE: string;
+		VSCODE_INJECTION: string;
 		windir: string;
 		ZES_ENABLE_SYSMAN: string;
 		_CONDA_EXE: string;
 		_CONDA_ROOT: string;
+		__CONDA_OPENSLL_CERT_FILE_SET: string;
 		[key: `PUBLIC_${string}`]: undefined;
 		[key: `${string}`]: string | undefined;
 	}

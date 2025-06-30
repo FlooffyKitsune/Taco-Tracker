@@ -42,6 +42,7 @@ export interface TacoSession {
 	peopleCount: number;
 	orders: TacoOrder[];
 	consumptions: TacoConsumption[];
+	participants?: User[]; // Optional for backward compatibility
 }
 
 // New user-focused types

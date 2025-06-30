@@ -1,6 +1,6 @@
 import { json } from '@sveltejs/kit';
 import { prisma } from '$lib/database.js';
-import { createTacoSession, addTacoOrder } from '$lib/userService.js';
+import { createTacoSession } from '$lib/userService.js';
 import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async ({ url, locals }) => {
@@ -12,7 +12,6 @@ export const GET: RequestHandler = async ({ url, locals }) => {
 	try {
 		const activeSessions = await prisma.tacoSession.findMany({
 			where: {
-				isActive: true,
 				participants: {
 					some: {
 						userId: session.user.id
@@ -26,7 +25,7 @@ export const GET: RequestHandler = async ({ url, locals }) => {
 						user: true
 					}
 				},
-				orders: {
+				consumptions: {
 					include: {
 						tacoType: true
 					}

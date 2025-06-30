@@ -3,6 +3,18 @@
 		"src/routes/+layout.server.ts",
 		"src/routes/+layout.server.ts"
 	],
+	"/achievements": [
+		"src/routes/+layout.server.ts"
+	],
+	"/api/achievements": [
+		"src/routes/api/achievements/+server.ts"
+	],
+	"/api/achievements/check": [
+		"src/routes/api/achievements/check/+server.ts"
+	],
+	"/api/achievements/secret": [
+		"src/routes/api/achievements/secret/+server.ts"
+	],
 	"/api/cleanup": [
 		"src/routes/api/cleanup/+server.ts"
 	],
@@ -12,11 +24,17 @@
 	"/api/fix-email": [
 		"src/routes/api/fix-email/+server.ts"
 	],
+	"/api/leaderboard": [
+		"src/routes/api/leaderboard/+server.ts"
+	],
 	"/api/seed": [
 		"src/routes/api/seed/+server.ts"
 	],
 	"/api/sessions": [
 		"src/routes/api/sessions/+server.ts"
+	],
+	"/api/sessions/recent": [
+		"src/routes/api/sessions/recent/+server.ts"
 	],
 	"/api/taco-types": [
 		"src/routes/api/taco-types/+server.ts"
@@ -27,8 +45,20 @@
 	"/api/users": [
 		"src/routes/api/users/+server.ts"
 	],
+	"/api/users/achievements": [
+		"src/routes/api/users/achievements/+server.ts"
+	],
 	"/api/users/delete": [
 		"src/routes/api/users/delete/+server.ts"
+	],
+	"/api/users/delete/[id]": [
+		"src/routes/api/users/delete/[id]/+server.ts"
+	],
+	"/api/users/stats": [
+		"src/routes/api/users/stats/+server.ts"
+	],
+	"/leaderboard": [
+		"src/routes/+layout.server.ts"
 	],
 	"/setup": [
 		"src/routes/+layout.server.ts"

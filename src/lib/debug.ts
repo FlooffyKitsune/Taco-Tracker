@@ -41,3 +41,13 @@ export function debugError(message: string, ...args: any[]): void {
 		console.error(`[TACO-DEBUG] ${message}`, ...args);
 	}
 }
+
+export function isDevAccount(user?: { name?: string | null; email?: string | null }): boolean {
+	if (!user) return false;
+	
+	// Check if it's a developer account (same logic as debug mode but without env checks)
+	return DEVELOPER_ACCOUNTS.some(dev => 
+		user.name?.toLowerCase().includes(dev.toLowerCase()) ||
+		user.email?.toLowerCase().includes(dev.toLowerCase())
+	);
+}

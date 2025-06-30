@@ -460,22 +460,6 @@ label {
 	50% { transform: translateY(-8px); }
 }
 
-/* Taco rain - simplified */
-@keyframes tacoFall {
-	0% {
-		transform: translateY(-100vh) rotate(0deg);
-		opacity: 1;
-	}
-	100% {
-		transform: translateY(100vh) rotate(360deg);
-		opacity: 0;
-	}
-}
-
-.taco-rain {
-	animation: tacoFall 3s linear infinite;
-}
-
 /* Subtle glow for active elements */
 .glow-soft {
 	box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);

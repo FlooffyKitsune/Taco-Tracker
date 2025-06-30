@@ -10,12 +10,8 @@
 	export let data: PageData;
 
 	// Placeholder components for new features
-	function AchievementsView() {
-		return '<div class="text-center py-20"><h2 class="text-3xl font-bold mb-4">🏆 Achievements</h2><p class="text-gray-600">Coming soon! Track your taco milestones.</p></div>';
-	}
-
 	function LeaderboardView() {
-		return '<div class="text-center py-20"><h2 class="text-3xl font-bold mb-4">👑 Leaderboard</h2><p class="text-gray-600">Coming soon! See who\'s the ultimate taco champion.</p></div>';
+		return '<div class="text-center py-20"><h2 class="text-3xl font-bold mb-4">👑 Leaderboard</h2><p class="text-gray-600">This tab now redirects to the dedicated Leaderboard page!</p></div>';
 	}
 </script>
 
@@ -88,23 +84,27 @@
 	
 	{#if $activeTab === 'calculator'}
 		<div class="max-w-2xl mx-auto">
-			<TacoCalculator />
+			<div class="bg-white/10 backdrop-blur-xl rounded-2xl p-8 border border-white/20">
+				<TacoCalculator />
+			</div>
 		</div>
 	{:else if $activeTab === 'tracker'}
 		<div class="max-w-2xl mx-auto">
-			<ConsumptionTracker />
+			<div class="bg-white/10 backdrop-blur-xl rounded-2xl p-8 border border-white/20">
+				<ConsumptionTracker />
+			</div>
 		</div>
 	{:else if $activeTab === 'stats'}
 		<div class="max-w-4xl mx-auto">
-			<TacoStats />
-		</div>
-	{:else if $activeTab === 'achievements'}
-		<div class="max-w-4xl mx-auto">
-			{@html AchievementsView()}
+			<div class="bg-white/10 backdrop-blur-xl rounded-2xl p-8 border border-white/20">
+				<TacoStats />
+			</div>
 		</div>
 	{:else if $activeTab === 'leaderboard'}
 		<div class="max-w-4xl mx-auto">
-			{@html LeaderboardView()}
+			<div class="bg-white/10 backdrop-blur-xl rounded-2xl p-8 border border-white/20">
+				{@html LeaderboardView()}
+			</div>
 		</div>
 	{/if}
 {/if}

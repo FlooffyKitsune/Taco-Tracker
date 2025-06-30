@@ -26,6 +26,15 @@ async function seedDatabase() {
 		await prisma.$connect();
 		console.log('✅ Database connected successfully');
 
+		// Clean up legacy achievements first
+		console.log('🧹 Cleaning up legacy achievements...');
+		await prisma.achievement.deleteMany({
+			where: {
+				name: 'Daily Warrior'
+			}
+		});
+		console.log('✅ Legacy achievements cleaned up');
+
 		// Create taco types
 		console.log('🌮 Creating taco types...');
 		let tacoTypesCreated = 0;
@@ -45,7 +54,12 @@ async function seedDatabase() {
 		for (const achievement of DEFAULT_ACHIEVEMENTS) {
 			const result = await prisma.achievement.upsert({
 				where: { name: achievement.name },
-				update: {},
+				update: {
+					description: achievement.description,
+					icon: achievement.icon,
+					category: achievement.category,
+					requirement: achievement.requirement
+				},
 				create: achievement
 			});
 			achievementsCreated++;
@@ -64,7 +78,7 @@ async function seedDatabase() {
 		console.error('❌ Seeding error:', error);
 		return json({ 
 			success: false, 
-			error: `Failed to seed database: ${error.message}`,
+			error: `Failed to seed database: ${error instanceof Error ? error.message : 'Unknown error'}`,
 			details: error
 		}, { status: 500 });
 	} finally {		await prisma.$disconnect();

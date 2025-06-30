@@ -6,175 +6,206 @@ export const DEFAULT_ACHIEVEMENTS = [
 	{
 		name: 'First Bite',
 		description: 'Track your very first taco!',
-		emoji: '🌮',
+		icon: '🌮',
 		category: 'consumption',
-		condition: JSON.stringify({ type: 'total_tacos', value: 1 }),
-		points: 10,
-		isHidden: false
+		requirement: 10
 	},
 	{
 		name: 'Taco Explorer',
 		description: 'Eat 5 tacos total',
-		emoji: '🗺️',
+		icon: '🗺️',
 		category: 'consumption',
-		condition: JSON.stringify({ type: 'total_tacos', value: 5 }),
-		points: 25,
-		isHidden: false
+		requirement: 25
 	},
 	{
 		name: 'Flavor Hunter',
 		description: 'Try 3 different taco types',
-		emoji: '🌈',
+		icon: '🌈',
 		category: 'consumption',
-		condition: JSON.stringify({ type: 'unique_types', value: 3 }),
-		points: 30,
-		isHidden: false
+		requirement: 30
 	},
 	{
 		name: 'Social Butterfly',
 		description: 'Join your first taco session with friends',
-		emoji: '🦋',
+		icon: '🦋',
 		category: 'social',
-		condition: JSON.stringify({ type: 'sessions_joined', value: 1 }),
-		points: 20,
-		isHidden: false
+		requirement: 20
 	},
 	{
 		name: 'Taco Master',
 		description: 'Eat 25 tacos total',
-		emoji: '👑',
+		icon: '👑',
 		category: 'consumption',
-		condition: JSON.stringify({ type: 'total_tacos', value: 25 }),
-		points: 100,
-		isHidden: false
+		requirement: 100
 	},
 	{
 		name: 'Menu Completionist',
 		description: 'Try all available taco types',
-		emoji: '🏆',
+		icon: '🏆',
 		category: 'consumption',
-		condition: JSON.stringify({ type: 'all_types' }),
-		points: 200,
-		isHidden: false
+		requirement: 200
 	},
 	{
 		name: 'Taco Legend',
 		description: 'Eat 50 tacos total',
-		emoji: '⭐',
+		icon: '⭐',
 		category: 'consumption',
-		condition: JSON.stringify({ type: 'total_tacos', value: 50 }),
-		points: 250,
-		isHidden: false
+		requirement: 250
 	},
 	{
-		name: 'Daily Warrior',
-		description: 'Track tacos on 7 different days',
-		emoji: '⚔️',
+		name: 'Taco Tuesday Warrior',
+		description: 'Track tacos on 5 different Tuesdays',
+		icon: '⚔️',
 		category: 'streak',
-		condition: JSON.stringify({ type: 'unique_days', value: 7 }),
-		points: 150,
-		isHidden: false
+		requirement: 150
+	},
+	{
+		name: 'Tuesday Champion',
+		description: 'Track tacos on 10 different Tuesdays',
+		icon: '🏆',
+		category: 'streak',
+		requirement: 200
 	},
 	{
 		name: 'TACO GOD',
 		description: 'Eat 100 tacos total - YOU ARE LEGENDARY!',
-		emoji: '🔱',
+		icon: '🔱',
 		category: 'consumption',
-		condition: JSON.stringify({ type: 'total_tacos', value: 100 }),
-		points: 500,
-		isHidden: false
+		requirement: 500
 	},
 	{
 		name: 'Secret Sauce',
-		description: 'Complete a taco session with exactly 13 tacos',
-		emoji: '🤫',
+		description: '',
+		icon: '🤫',
 		category: 'special',
-		condition: JSON.stringify({ type: 'session_exact_tacos', value: 13 }),
-		points: 75,
-		isHidden: true
+		requirement: 75
 	}
 ];
 
 export async function checkAndUnlockAchievements(userId: string): Promise<Achievement[]> {
-	const user = await prisma.user.findUnique({
-		where: { id: userId },
-		include: {
-			tacoConsumptions: {
-				include: {
-					tacoType: true
-				}
-			},
-			tacoSessionParticipants: {
-				include: {
-					session: true
-				}
-			},
-			achievements: {
-				include: {
-					achievement: true
+	try {
+		const user = await prisma.user.findUnique({
+			where: { id: userId },
+			include: {
+				consumptions: {
+					include: {
+						tacoType: true
+					}
+				},
+				sessionParticipants: {
+					include: {
+						session: true
+					}
+				},
+				achievements: {
+					include: {
+						achievement: true
+					}
 				}
 			}
+		});
+
+		if (!user) return [];
+
+		const allAchievements = await prisma.achievement.findMany();
+		const unlockedAchievementIds = user.achievements.map(ua => ua.achievementId);
+		const newlyUnlocked: any[] = [];
+
+		for (const achievement of allAchievements) {
+			if (unlockedAchievementIds.includes(achievement.id)) continue;
+
+			let shouldUnlock = false;
+
+			// Simple achievement checking based on achievement name and requirement
+			switch (achievement.name.toLowerCase()) {
+				case 'first bite':
+					shouldUnlock = user.consumptions.length >= 1;
+					break;
+				case 'taco explorer':
+					shouldUnlock = user.totalTacosEaten >= 5;
+					break;
+				case 'flavor hunter':
+					const uniqueTypes = new Set(user.consumptions.map(tc => tc.tacoTypeId));
+					shouldUnlock = uniqueTypes.size >= 3;
+					break;
+				case 'social butterfly':
+					shouldUnlock = user.sessionParticipants.length >= 1;
+					break;
+				case 'taco master':
+					shouldUnlock = user.totalTacosEaten >= 25;
+					break;
+				case 'menu completionist':
+					const uniqueTypesAll = new Set(user.consumptions.map(tc => tc.tacoTypeId));
+					// This should check if user has tried all available taco types
+					const totalTacoTypes = await prisma.tacoType.count();
+					shouldUnlock = uniqueTypesAll.size >= totalTacoTypes;
+					break;
+				case 'taco legend':
+					shouldUnlock = user.totalTacosEaten >= 50;
+					break;
+				case 'taco tuesday warrior':
+					// Count unique Tuesdays when user tracked tacos
+					const uniqueTuesdays = new Set();
+					user.consumptions.forEach(consumption => {
+						const date = new Date(consumption.consumedAt);
+						if (date.getDay() === 2) { // Tuesday is day 2
+							const tuesdayKey = `${date.getFullYear()}-${date.getMonth()}-${Math.floor(date.getDate() / 7)}`;
+							uniqueTuesdays.add(tuesdayKey);
+						}
+					});
+					shouldUnlock = uniqueTuesdays.size >= 5;
+					break;
+				case 'tuesday champion':
+					// Count unique Tuesdays when user tracked tacos
+					const uniqueTuesdaysChamp = new Set();
+					user.consumptions.forEach(consumption => {
+						const date = new Date(consumption.consumedAt);
+						if (date.getDay() === 2) { // Tuesday is day 2
+							const tuesdayKey = `${date.getFullYear()}-${date.getMonth()}-${Math.floor(date.getDate() / 7)}`;
+							uniqueTuesdaysChamp.add(tuesdayKey);
+						}
+					});
+					shouldUnlock = uniqueTuesdaysChamp.size >= 10;
+					break;
+				case 'taco god':
+					shouldUnlock = user.totalTacosEaten >= 100;
+					break;
+				case 'secret sauce':
+					// This will be handled separately via the footer heart click mechanism
+					shouldUnlock = false;
+					break;
+				default:
+					// For other achievements, fall back to total tacos consumed
+					shouldUnlock = user.totalTacosEaten >= achievement.requirement;
+			}
+
+			if (shouldUnlock) {
+				await prisma.userAchievement.create({
+					data: {
+						userId: user.id,
+						achievementId: achievement.id
+					}
+				});
+				
+				// Convert to the expected Achievement type format
+				newlyUnlocked.push({
+					id: achievement.id,
+					name: achievement.name,
+					description: achievement.description,
+					icon: achievement.icon,
+					category: achievement.category,
+					points: achievement.requirement, // Use requirement as points
+					emoji: achievement.icon, // Use icon as emoji
+					isHidden: false
+				});
+			}
 		}
-	});
 
-	if (!user) return [];
-
-	const allAchievements = await prisma.achievement.findMany();
-	const unlockedAchievementIds = user.achievements.map(ua => ua.achievementId);
-	const newlyUnlocked: Achievement[] = [];
-
-	for (const achievement of allAchievements) {
-		if (unlockedAchievementIds.includes(achievement.id)) continue;
-
-		const condition = JSON.parse(achievement.condition);
-		let shouldUnlock = false;
-
-		switch (condition.type) {
-			case 'total_tacos':
-				shouldUnlock = user.totalTacosEaten >= condition.value;
-				break;
-			
-			case 'unique_types':
-				const uniqueTypes = new Set(user.tacoConsumptions.map(tc => tc.tacoTypeId));
-				shouldUnlock = uniqueTypes.size >= condition.value;
-				break;
-			
-			case 'sessions_joined':
-				shouldUnlock = user.tacoSessionParticipants.length >= condition.value;
-				break;
-			
-			case 'all_types':
-				const totalTypes = await prisma.tacoType.count();
-				const userTypes = new Set(user.tacoConsumptions.map(tc => tc.tacoTypeId));
-				shouldUnlock = userTypes.size >= totalTypes;
-				break;
-			
-			case 'unique_days':
-				const uniqueDays = new Set(
-					user.tacoConsumptions.map(tc => tc.consumedAt.toDateString())
-				);
-				shouldUnlock = uniqueDays.size >= condition.value;
-				break;
-			
-			case 'session_exact_tacos':
-				shouldUnlock = user.tacoSessionParticipants.some(tsp => 
-					tsp.tacosConsumed === condition.value
-				);
-				break;
-		}
-
-		if (shouldUnlock) {
-			await prisma.userAchievement.create({
-				data: {
-					userId: user.id,
-					achievementId: achievement.id
-				}
-			});
-			newlyUnlocked.push(achievement);
-		}
+		return newlyUnlocked;
+	} catch (error) {
+		console.error('Error checking achievements:', error);
+		return [];
 	}
-
-	return newlyUnlocked;
 }
 
 export async function getUserAchievements(userId: string) {
@@ -210,4 +241,53 @@ export function getPointsColor(points: number): string {
 	if (points >= 100) return 'text-orange-600';
 	if (points >= 50) return 'text-blue-600';
 	return 'text-gray-600';
+}
+
+export async function unlockSecretAchievement(userId: string): Promise<Achievement | null> {
+	try {
+		// Check if user already has the secret sauce achievement
+		const existingAchievement = await prisma.userAchievement.findFirst({
+			where: {
+				userId: userId,
+				achievement: {
+					name: 'Secret Sauce'
+				}
+			}
+		});
+
+		if (existingAchievement) {
+			return null; // Already unlocked
+		}
+
+		// Find the secret sauce achievement
+		const secretAchievement = await prisma.achievement.findFirst({
+			where: { name: 'Secret Sauce' }
+		});
+
+		if (!secretAchievement) {
+			return null; // Achievement doesn't exist
+		}
+
+		// Unlock the achievement
+		await prisma.userAchievement.create({
+			data: {
+				userId: userId,
+				achievementId: secretAchievement.id
+			}
+		});
+
+		return {
+			id: secretAchievement.id,
+			name: secretAchievement.name,
+			description: secretAchievement.description,
+			emoji: secretAchievement.icon,
+			category: secretAchievement.category,
+			points: secretAchievement.requirement,
+			isHidden: false
+		};
+
+	} catch (error) {
+		console.error('Error unlocking secret achievement:', error);
+		return null;
+	}
 }
