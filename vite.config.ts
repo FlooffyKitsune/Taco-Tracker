@@ -7,5 +7,11 @@ export default defineConfig({
 		port: 5173,
 		strictPort: true,
 		host: true
+	},
+	optimizeDeps: {
+		exclude: ['@prisma/client']
+	},
+	ssr: {
+		noExternal: ['@prisma/client']
 	}
 });
