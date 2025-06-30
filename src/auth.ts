@@ -2,7 +2,7 @@ import { SvelteKitAuth } from "@auth/sveltekit"
 import Discord from "@auth/sveltekit/providers/discord"
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import { PrismaClient } from "@prisma/client"
-import { DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET, NEXTAUTH_SECRET } from "$env/static/private"
+import { env } from "$env/dynamic/private"
 
 const prisma = new PrismaClient()
 
@@ -10,8 +10,8 @@ export const { handle, signIn, signOut } = SvelteKitAuth({
   adapter: PrismaAdapter(prisma),
   providers: [
     Discord({
-      clientId: DISCORD_CLIENT_ID,
-      clientSecret: DISCORD_CLIENT_SECRET,
+      clientId: env.DISCORD_CLIENT_ID,
+      clientSecret: env.DISCORD_CLIENT_SECRET,
     })
   ],
   pages: {
@@ -86,6 +86,6 @@ export const { handle, signIn, signOut } = SvelteKitAuth({
       }
     }
   },
-  secret: NEXTAUTH_SECRET,
+  secret: env.NEXTAUTH_SECRET,
   trustHost: true
 })
